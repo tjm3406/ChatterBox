@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public abstract class Receiver implements ChatterboxProtocol, Runnable  {
 
-    protected InputStream input;
-    protected OutputStream output;
+    private InputStream input;
+    private OutputStream output;
     private Socket client;
     private String message;
     private String host;
