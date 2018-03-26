@@ -5,6 +5,8 @@ import common.Receiver;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ClientReader extends Receiver {
@@ -33,7 +35,7 @@ public class ClientReader extends Receiver {
                 disconnected();
                 break;
             case CHAT_RECEIVED:
-                chatRecieved(messageArray);
+                chatReceived(messageArray);
                 break;
             case WHISPER_RECEIVED:
                 whisperReceived(messageArray);
@@ -69,27 +71,31 @@ public class ClientReader extends Receiver {
     }
 
     public void userLeft(String username) {
-
+        output.println("A user has left the server: " + username);
     }
 
     public void userJoined(String username) {
-
+        output.println("A user has joined the chatterbox server: " + username);
     }
 
     public void users(String[] messageArr) {
-
+        for(int i = 0; i < messageArr.length; i++) {
+            if(i >= 1) {
+                output.println(messageArr[i]);
+            }
+        }
     }
 
     public void whisperSent(String[] messageArr) {
-
+        output.println("You whispered to " + messageArr[1] + ": " + messageArr[2]);
     }
 
     public void whisperReceived(String[] messageArr) {
-
+        output.println(messageArr[1] + " whispers to you: " + messageArr[2]);
     }
 
-    public void chatRecieved(String[] messageArr) {
-
+    public void chatReceived(String[] messageArr) {
+        output.println(messageArr[1] + " said: " + messageArr[2]);
     }
 
     public void disconnected() {
