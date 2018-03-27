@@ -59,7 +59,7 @@ public class ClientCommandInterface {
 
             else if (message.split(" ")[0].equals("/w")) {
                 String[] splitMessage = message.split(" ", 3);
-                thisGuy.sendWhisper("Send_whisper::" + splitMessage[1] + "::" + splitMessage[2] + "\n");
+                thisGuy.sendWhisper("send_whisper::" + splitMessage[1] + "::" + splitMessage[2] + "\n");
             }
 
             else {

@@ -78,23 +78,25 @@ public class ClientReader extends Receiver {
     }
 
     public void users(String[] messageArr) {
-        for(int i = 0; i < messageArr.length; i++) {
-            if(i >= 1) {
-                System.out.println(messageArr[i]);
-            }
+        String[] users = messageArr[1].split("::");
+        for(int i = 0; i < users.length; i++) {
+            System.out.println(users[i]);
         }
     }
 
     public void whisperSent(String[] messageArr) {
-        System.out.println("You whispered to " + messageArr[1] + ": " + messageArr[2]);
+        String[] splitSecond = messageArr[1].split("::", 2);
+        System.out.println("You whispered to " + splitSecond[0] + ": " + splitSecond[1]);
     }
 
     public void whisperReceived(String[] messageArr) {
-        System.out.println(messageArr[1] + " whispers to you: " + messageArr[2]);
+        String[] splitSecond = messageArr[1].split("::", 2);
+        System.out.println(splitSecond[0] + " whispers to you: " + splitSecond[1]);
     }
 
     public void chatReceived(String[] messageArr) {
-        System.out.println(messageArr[1] + " said: " + messageArr[2]);
+        String[] splitSecond = messageArr[1].split("::", 2);
+        System.out.println(splitSecond[0] + " said: " + splitSecond[1]);
     }
 
     public void disconnected() {

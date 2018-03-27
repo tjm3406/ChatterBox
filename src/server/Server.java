@@ -5,50 +5,24 @@ import common.Receiver;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Server extends Receiver {
+public class Server {
 
     private HashMap<String, ClientReader> userDatabase;
     private Scanner input;
     private PrintStream output;
+    private static ServerSocket server;
 
-    public Server(Socket client) throws IOException {
-        super(client);
-        userDatabase = new HashMap<>();
-        this.input = new Scanner(client.getInputStream());
-        this.output = new PrintStream(client.getOutputStream());
-    }
-
-    @Override
-    public void messageHandler(String message) {
-        String[] messageArray = parse(message);
-        switch (messageArray[0]){
-            case CONNECT:
-
+    public static void main(String[] args) throws IOException {
+        while (true) {
+            Socket client = server.accept();
+            ClientHandler handler = new ClientHandler(client);
+            new Thread(handler).start();
         }
-    }
-
-    public void connect(String username) {
-
-
-    }
-
-    public void disconnect() {
-
-    }
-
-    public void send_chat(String message) {
-
-    }
-
-    public void send_whisper(String message) {
-
-    }
-
-    public void list_users() {
 
     }
 }
