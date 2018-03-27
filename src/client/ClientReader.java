@@ -3,6 +3,7 @@ package client;
 import common.Receiver;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -57,9 +58,23 @@ public class ClientReader extends Receiver {
             case FATAL_ERROR:
                 fatalError(messageArray[1]);
                 break;
+            case CONNECT:
+                connect(messageArray[1]);
+                break;
+            case DISCONNECT:
+                disconnect();
+                break;
+            case SEND_CHAT:
+                sendChat(messageArray);
+                break;
+            case SEND_WHISPER:
+                sendWhisper(messageArray);
+                break;
+            case LIST_USERS:
+                listUsers();
+                break;
 
         }
-
     }
 
     public void fatalError(String message) {
@@ -104,5 +119,53 @@ public class ClientReader extends Receiver {
 
     public void connected(String hostName) {
         output.println(CONNECT);
+    }
+
+    public void listUsers() {
+        try {
+            output.write("list_users\n".getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendWhisper(String[] messageArr) {
+        try {
+            output.write("send_whisper::".getBytes());
+            output.write(messageArr[0].getBytes());
+            output.write("::".getBytes());
+            output.write(messageArr[1].getBytes());
+            output.write("\n".getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendChat(String message) {
+        try {
+            output.write("send_chat::".getBytes());
+            output.write(message.getBytes());
+            output.write("\n".getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void disconnect() {
+        try {
+            output.write("disconnect\n".getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void connect(String hostName) {
+        try {
+            output.write("connect::".getBytes());
+            output.write(hostName.getBytes());
+            output.write("\n".getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
