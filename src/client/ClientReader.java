@@ -12,14 +12,12 @@ import java.util.Scanner;
 
 public class ClientReader extends Receiver {
 
-    private ClientCommandInterface userInterface;
     private Scanner input;
     private PrintStream output;
 
 
     public ClientReader(Socket client) throws IOException {
         super(client);
-        userInterface = new ClientCommandInterface();
         this.input = new Scanner(client.getInputStream());
         this.output = new PrintStream(client.getOutputStream());
 
@@ -30,7 +28,7 @@ public class ClientReader extends Receiver {
         String[] messageArray = parse(message);
         switch (messageArray[0]){
             case CONNECTED:
-                connected(messageArray[1]);
+                connected();
                 break;
             case DISCONNECTED:
                 disconnected();
@@ -58,67 +56,53 @@ public class ClientReader extends Receiver {
             case FATAL_ERROR:
                 fatalError(messageArray[1]);
                 break;
-            case CONNECT:
-                connect(messageArray[1]);
-                break;
-            case DISCONNECT:
-                disconnect();
-                break;
-            case SEND_CHAT:
-                sendChat(messageArray);
-                break;
-            case SEND_WHISPER:
-                sendWhisper(messageArray);
-                break;
-            case LIST_USERS:
-                listUsers();
-                break;
+
 
         }
     }
 
     public void fatalError(String message) {
-        output.println(message);
+        System.out.println(message);
     }
 
     public void error(String message) {
-        output.println(message);
+        System.out.println(message);
     }
 
     public void userLeft(String username) {
-        output.println("A user has left the server: " + username);
+        System.out.println("A user has left the server: " + username);
     }
 
     public void userJoined(String username) {
-        output.println("A user has joined the chatterbox server: " + username);
+        System.out.println("A user has joined the chatterbox server: " + username);
     }
 
     public void users(String[] messageArr) {
         for(int i = 0; i < messageArr.length; i++) {
             if(i >= 1) {
-                output.println(messageArr[i]);
+                System.out.println(messageArr[i]);
             }
         }
     }
 
     public void whisperSent(String[] messageArr) {
-        output.println("You whispered to " + messageArr[1] + ": " + messageArr[2]);
+        System.out.println("You whispered to " + messageArr[1] + ": " + messageArr[2]);
     }
 
     public void whisperReceived(String[] messageArr) {
-        output.println(messageArr[1] + " whispers to you: " + messageArr[2]);
+        System.out.println(messageArr[1] + " whispers to you: " + messageArr[2]);
     }
 
     public void chatReceived(String[] messageArr) {
-        output.println(messageArr[1] + " said: " + messageArr[2]);
+        System.out.println(messageArr[1] + " said: " + messageArr[2]);
     }
 
     public void disconnected() {
-        output.println(DISCONNECTED);
+        System.out.println(DISCONNECTED);
     }
 
-    public void connected(String hostName) {
-        output.println(CONNECT);
+    public void connected() {
+        System.out.println(CONNECTED);
     }
 
     public void listUsers() {
@@ -129,13 +113,9 @@ public class ClientReader extends Receiver {
         }
     }
 
-    public void sendWhisper(String[] messageArr) {
+    public void sendWhisper(String message) {
         try {
-            output.write("send_whisper::".getBytes());
-            output.write(messageArr[0].getBytes());
-            output.write("::".getBytes());
-            output.write(messageArr[1].getBytes());
-            output.write("\n".getBytes());
+            output.write(message.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -143,9 +123,7 @@ public class ClientReader extends Receiver {
 
     public void sendChat(String message) {
         try {
-            output.write("send_chat::".getBytes());
             output.write(message.getBytes());
-            output.write("\n".getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -168,4 +146,5 @@ public class ClientReader extends Receiver {
             e.printStackTrace();
         }
     }
+
 }
