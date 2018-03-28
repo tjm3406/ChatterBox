@@ -12,12 +12,12 @@ import java.util.Scanner;
 
 public class Server {
 
-    private HashMap<String, ClientReader> userDatabase;
-    private Scanner input;
-    private PrintStream output;
-    private static ServerSocket server;
+
 
     public static void main(String[] args) throws IOException {
+
+        ServerSocket server = new ServerSocket(6789);
+
         while (true) {
             Socket client = server.accept();
             ClientHandler handler = new ClientHandler(client);

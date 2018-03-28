@@ -41,6 +41,6 @@ public abstract class Receiver implements ChatterboxProtocol, Runnable  {
 
     }
 
-    public abstract void messageHandler(String message);
+    public abstract void messageHandler(String message) throws IOException;
 
 }
