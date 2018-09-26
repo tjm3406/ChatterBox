@@ -1,3 +1,7 @@
+/** Name: Tyler Miller
+ *  Date: 3/27/18
+ *  Assignment: Lab 8
+ */
 package client;
 
 import common.Receiver;
@@ -16,6 +20,10 @@ public class ClientReader extends Receiver {
     private PrintStream output;
 
 
+    /**
+     * Creates a client side reader
+     * @param client the socket used to crete a client
+     */
     public ClientReader(Socket client) throws IOException {
         super(client);
         this.input = new Scanner(client.getInputStream());
@@ -23,6 +31,10 @@ public class ClientReader extends Receiver {
 
     }
 
+    /**
+     * Handles the messages for the client side
+     * @param message the message being handled
+     */
     @Override
     public void messageHandler(String message) {
         String[] messageArray = parse(message);
@@ -38,6 +50,7 @@ public class ClientReader extends Receiver {
                 break;
             case WHISPER_RECEIVED:
                 whisperReceived(messageArray);
+                break;
             case WHISPER_SENT:
                 whisperSent(messageArray);
                 break;
@@ -61,22 +74,42 @@ public class ClientReader extends Receiver {
         }
     }
 
+    /**
+     * Sends an error that forces disconnect
+     * @param message the message
+     */
     public void fatalError(String message) {
         System.out.println(message);
     }
 
+    /**
+     * An error that doesn't force disconnect
+     * @param message the message
+     */
     public void error(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Prints to the client that a user left
+     * @param username the user that left
+     */
     public void userLeft(String username) {
         System.out.println("A user has left the server: " + username);
     }
 
+    /**
+     * Prints to the client that the user joined
+     * @param username the user that joined
+     */
     public void userJoined(String username) {
         System.out.println("A user has joined the chatterbox server: " + username);
     }
 
+    /**
+     * Prints the list of users from the command sent by the server
+     * @param messageArr an array of users
+     */
     public void users(String[] messageArr) {
         String[] users = messageArr[1].split("::");
         for(int i = 0; i < users.length; i++) {
@@ -84,29 +117,51 @@ public class ClientReader extends Receiver {
         }
     }
 
+    /**
+     * Prints that a whisper was sent to someone
+     * @param messageArr an array that contains who the whisper was sent to and the message sent
+     */
     public void whisperSent(String[] messageArr) {
         String[] splitSecond = messageArr[1].split("::", 2);
         System.out.println("You whispered to " + splitSecond[0] + ": " + splitSecond[1]);
     }
 
+    /**
+     * Prints that a whisper was received by this client
+     * @param messageArr an array that contains who sent the whisper to and the message sent
+     */
     public void whisperReceived(String[] messageArr) {
         String[] splitSecond = messageArr[1].split("::", 2);
         System.out.println(splitSecond[0] + " whispers to you: " + splitSecond[1]);
     }
 
+    /**
+     * Prints that a chat was received
+     * @param messageArr An array containing the message and who said it
+     */
     public void chatReceived(String[] messageArr) {
         String[] splitSecond = messageArr[1].split("::", 2);
         System.out.println(splitSecond[0] + " said: " + splitSecond[1]);
     }
 
+    /**
+     * Prints that you were disconnected
+     */
     public void disconnected() {
         System.out.println(DISCONNECTED);
     }
 
+    /**
+     * Prints that there was a successful connection
+     */
     public void connected() {
         System.out.println(CONNECTED);
+        System.out.println("Welcome to the chatterbox application! Type '/help' to see a list of commands.");
     }
 
+    /**
+     * Writes the list command to the server
+     */
     public void listUsers() {
         try {
             output.write("list_users\n".getBytes());
@@ -115,6 +170,10 @@ public class ClientReader extends Receiver {
         }
     }
 
+    /**
+     * Writes a send whisper command to the server
+     * @param message the message to be written in the :: line terminating form
+     */
     public void sendWhisper(String message) {
         try {
             output.write(message.getBytes());
@@ -123,6 +182,10 @@ public class ClientReader extends Receiver {
         }
     }
 
+    /**
+     * Writes a send chat command to the server
+     * @param message the message to be written in the :: line terminating form
+     */
     public void sendChat(String message) {
         try {
             output.write(message.getBytes());
@@ -131,6 +194,9 @@ public class ClientReader extends Receiver {
         }
     }
 
+    /**
+     * Writes a disconnect attempt to the server
+     */
     public void disconnect() {
         try {
             output.write("disconnect\n".getBytes());
@@ -139,6 +205,10 @@ public class ClientReader extends Receiver {
         }
     }
 
+    /**
+     * Writes a connect attempt to the server
+     * @param hostName the username that is attempting to connect
+     */
     public void connect(String hostName) {
         try {
             output.write("connect::".getBytes());

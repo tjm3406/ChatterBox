@@ -1,3 +1,7 @@
+/** Name: Tyler Miller
+ *  Date: 3/27/18
+ *  Assignment: Lab 8
+ */
 package client;
 
 import java.io.IOException;
@@ -6,6 +10,9 @@ import java.util.Scanner;
 
 public class ClientCommandInterface {
 
+    /**
+     * The interface for the client. Run in the command line
+     */
     public static void main(String[] args) throws IOException {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter a host: ");
