@@ -22,6 +22,7 @@ public class ClientHandler extends Receiver {
 
 
     /**
+     *
      * Creates the servers client handler
      * @param client the socket between the client and server
      * @param userDatabase a collection of users, key is username and value is clienthandler object.
